@@ -1,29 +1,45 @@
 import { create } from "zustand";
-import { getLeaderboard } from "../api/llama-rally";
-
-export type Leaderboard = {
-  id: number;
-  name: string;
-  price: number;
-  price_per_score: number;
-  rank: number;
-  score: number;
-};
+import {
+  getLeaderboard,
+  getLeaderboardAgents,
+  LeaderboardModel,
+  LeaderboardAgent,
+} from "../api/llama-rally";
 
 type LeaderboardModelsState = {
-  list: Leaderboard[];
-
+  list: LeaderboardModel[];
   loadLeaderboardModels: () => void;
 };
 
-export const useLeaderboardStore = create<LeaderboardModelsState>((set) => ({
-  list: [],
-  loadLeaderboardModels: async () => {
-    const modelList = (await getLeaderboard()) as Leaderboard[];
+export const useLeaderboardModelsStore = create<LeaderboardModelsState>(
+  (set) => ({
+    list: [],
+    loadLeaderboardModels: async () => {
+      const modelList = await getLeaderboard();
 
-    set((state) => ({
-      ...state,
-      list: modelList.map((item, index) => ({ ...item, id: index })),
-    }));
-  },
-}));
+      set((state) => ({
+        ...state,
+        list: modelList.map((item, index) => ({ ...item, id: index })),
+      }));
+    },
+  })
+);
+
+type LeaderboardAgentsState = {
+  list: LeaderboardAgent[];
+  loadLeaderboardAgents: () => void;
+};
+
+export const useLeaderboardAgentsStore = create<LeaderboardAgentsState>(
+  (set) => ({
+    list: [],
+    loadLeaderboardAgents: async () => {
+      const modelList = await getLeaderboardAgents();
+
+      set((state) => ({
+        ...state,
+        list: modelList.map((item, index) => ({ ...item, id: index })),
+      }));
+    },
+  })
+);

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import {
   Leaderboard,
-  useLeaderboardStore,
+  useLeaderboardModelsStore,
 } from "../../stores/leaderboard.store";
 
 import Box from "@mui/material/Box";
@@ -37,7 +37,7 @@ const columns: GridColDef<Leaderboard>[] = [
 ];
 
 export default function LeaderboardModels() {
-  const leaderboardStore = useLeaderboardStore();
+  const leaderboardStore = useLeaderboardModelsStore();
 
   useEffect(() => {
     leaderboardStore.loadLeaderboardModels();

@@ -55,11 +55,37 @@ export async function getRandomModels() {
 //   }
 // }
 
+export type LeaderboardModel = {
+  id: number;
+  name: string;
+  price: number;
+  price_per_score: number;
+  rank: number;
+  score: number;
+};
+
 export async function getLeaderboard() {
   const response = await fetch(`${serverUrl}/leaderboard`, {
     headers: { "Content-Type": "application/json" },
   });
-  const jsonData = await response.json();
+  const jsonData = (await response.json()) as LeaderboardModel[];
+
+  return jsonData;
+}
+
+export type LeaderboardAgent = {
+  rank: number;
+  name: string;
+  score: number;
+  price: number;
+  price_per_score: number;
+}[];
+
+export async function getLeaderboardAgents() {
+  const response = await fetch(`${serverUrl}/leaderboard_agents`, {
+    headers: { "Content-Type": "application/json" },
+  });
+  const jsonData = (await response.json()) as LeaderboardAgent[];
 
   return jsonData;
 }
