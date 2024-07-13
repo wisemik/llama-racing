@@ -46,7 +46,7 @@ export default function LeaderboardModels() {
   return (
     <Box sx={{ height: 400, width: "100%" }}>
       {leaderboardStore.list && (
-        <DataGrid rows={leaderboardStore.list} columns={columns} />
+        <DataGrid rows={leaderboardStore.list} columns={columns} autoPageSize />
       )}
     </Box>
   );

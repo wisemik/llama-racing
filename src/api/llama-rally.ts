@@ -1,3 +1,5 @@
+import { ISuccessResult } from "@worldcoin/idkit";
+
 const serverUrl = "http://164.92.123.157:5001";
 
 type CriticizeUserResponse = {
@@ -61,3 +63,24 @@ export async function getLeaderboard() {
 
   return jsonData;
 }
+
+export type VerifyResponse = { code: string; detail: string };
+
+export const verify = async (result: ISuccessResult) => {
+  const reqBody = {
+    merkle_root: result.merkle_root,
+    nullifier_hash: result.nullifier_hash,
+    proof: result.proof,
+    verification_level: result.verification_level,
+    action: import.meta.env.VITE_NEXT_PUBLIC_WLD_ACTION,
+    signal: "",
+  };
+
+  const res = await fetch(`${serverUrl}/verify`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(reqBody),
+  });
+
+  return (await res.json()) as VerifyResponse;
+};

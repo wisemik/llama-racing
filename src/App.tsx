@@ -9,13 +9,20 @@ import BattleModels from "./tabs/battle-models/Battle.tab.tsx";
 import LeaderboardModels from "./tabs/leaderboard-models/LeaderboardModels.tab.tsx";
 import LeaderboardAgents from "./tabs/leaderboard-agents/LeaderboardAgents.tab.tsx";
 import BattleAgents from "./tabs/battle-agents/BattleAgents.tab.tsx";
+import Auth from "./Auth.tsx";
+import { useAuthStore } from "./stores/auth.store.ts";
 
 export default function App() {
   const [value, setValue] = React.useState("1");
+  const authStore = useAuthStore();
 
   const handleChange = (_: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+
+  if (!authStore.nullifier_hash) {
+    return <Auth />;
+  }
 
   return (
     <Box sx={{ width: "100%", maxWidth: 800, typography: "body1" }}>
