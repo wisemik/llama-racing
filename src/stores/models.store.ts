@@ -13,11 +13,11 @@ interface ModelState {
 
 export const useModelsStore = create<ModelState>((set) => ({
   modelA: {
-    name: null,
+    name: "Model A (GPT-4o)",
     response: "",
   },
   modelB: {
-    name: null,
+    name: "Model B (GPT-4)",
     response: "",
   },
   fetchModelAResponse: async (prompt: string) => {
