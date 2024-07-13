@@ -1,49 +1,70 @@
 import { Button, Grid } from "@mui/material";
+import { useModelsStore } from "../../stores/models.store";
+import { useVoteStore } from "../../stores/vote.store";
+import { VoteResult } from "../../api/llama-rally";
+import { useVoteModal, VoteModal } from "./modals";
 
 export function Vote() {
-  const handleVote = (vote: string) => {
-    console.log(`Vote: ${vote}`);
-    // Implement voting logic here
+  const modelsStore = useModelsStore();
+  const voteStore = useVoteStore();
+  const voteModal = useVoteModal();
+
+  const handleVote = async (result: VoteResult) => {
+    console.log(`Vote: ${result}`);
+
+    const message = await voteStore.sendVote({
+      modelA: modelsStore.modelA.type!,
+      modelB: modelsStore.modelB.type!,
+      result,
+    });
+
+    voteModal.update(true, message);
   };
 
   return (
-    <Grid container spacing={2} justifyContent="space-between" sx={{ mt: 2 }}>
-      <Grid item>
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={() => handleVote("A is better")}
-        >
-          A IS BETTER
-        </Button>
+    <>
+      <VoteModal />
+
+      <Grid container spacing={2} justifyContent="space-between" sx={{ mt: 2 }}>
+        <Grid item>
+          <Button
+            variant={
+              voteStore.voteResult == modelsStore.modelA.type
+                ? "contained"
+                : "outlined"
+            }
+            size="small"
+            disabled={voteStore.voteResult != null}
+            onClick={() => handleVote(modelsStore.modelA.type!)}
+          >
+            A IS BETTER
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant={
+              voteStore.voteResult == modelsStore.modelB.type
+                ? "contained"
+                : "outlined"
+            }
+            size="small"
+            disabled={voteStore.voteResult != null}
+            onClick={() => handleVote(modelsStore.modelB.type!)}
+          >
+            B IS BETTER
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant={voteStore.voteResult == "draw" ? "contained" : "outlined"}
+            size="small"
+            disabled={voteStore.voteResult != null}
+            onClick={() => handleVote("draw")}
+          >
+            DRAW
+          </Button>
+        </Grid>
       </Grid>
-      <Grid item>
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={() => handleVote("B is better")}
-        >
-          B IS BETTER
-        </Button>
-      </Grid>
-      <Grid item>
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={() => handleVote("Tie")}
-        >
-          TIE
-        </Button>
-      </Grid>
-      <Grid item>
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={() => handleVote("Both are bad")}
-        >
-          BOTH ARE BAD
-        </Button>
-      </Grid>
-    </Grid>
+    </>
   );
 }

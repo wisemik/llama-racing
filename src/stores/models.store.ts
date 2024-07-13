@@ -15,11 +15,12 @@ interface ModelState {
   fetchModelAResponse: (responseChunk: string) => void;
   fetchModelBResponse: (responseChunk: string) => void;
   initRandomModels: () => void;
+  reset: () => void;
 }
 
 export const useModelsStore = create<ModelState>((set, state) => ({
-  modelA: { name: "Model A", type: null, response: "" },
-  modelB: { name: "Model B", type: null, response: "" },
+  modelA: { name: "Model A", type: null, response: null },
+  modelB: { name: "Model B", type: null, response: null },
 
   fetchModelAResponse: async (prompt: string) => {
     const type = state()?.modelA?.type as string;
@@ -32,7 +33,7 @@ export const useModelsStore = create<ModelState>((set, state) => ({
         modelA: {
           name: state.modelA.name,
           type: state.modelA.type,
-          response: state.modelA.response + content,
+          response: (state.modelA.response || "") + content,
         },
       }));
     }
@@ -49,7 +50,7 @@ export const useModelsStore = create<ModelState>((set, state) => ({
         modelB: {
           name: state.modelB.name,
           type: state.modelB.type,
-          response: state.modelB.response + content,
+          response: (state.modelB.response || "") + content,
         },
       }));
     }
@@ -61,6 +62,13 @@ export const useModelsStore = create<ModelState>((set, state) => ({
     set((state) => ({
       modelA: { ...state.modelA, type: models.modelA },
       modelB: { ...state.modelB, type: models.modelB },
+    }));
+  },
+
+  reset: () => {
+    set((state) => ({
+      modelA: { ...state.modelA, response: null },
+      modelB: { ...state.modelB, response: null },
     }));
   },
 }));

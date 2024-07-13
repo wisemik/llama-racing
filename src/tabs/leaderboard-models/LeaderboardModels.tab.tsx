@@ -1,8 +1,5 @@
 import { useEffect } from "react";
-import {
-  Leaderboard,
-  useLeaderboardModelsStore,
-} from "../../stores/leaderboard.store";
+import { useLeaderboardModelsStore } from "../../stores/leaderboard.store";
 
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";

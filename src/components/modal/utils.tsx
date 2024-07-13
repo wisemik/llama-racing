@@ -4,47 +4,7 @@ import { styled, css } from "@mui/system";
 import { Modal as BaseModal } from "@mui/base/Modal";
 import { create } from "zustand";
 
-type ModalState = {
-  isOpen: boolean;
-  text?: string;
-  update: (isOpen: boolean, text?: string) => void;
-};
-
-// eslint-disable-next-line react-refresh/only-export-components
-export const useModal = create<ModalState>((set) => ({
-  isOpen: false,
-  update: (isOpen: boolean, text?: string) => {
-    set(() => ({ isOpen, text }));
-  },
-}));
-
-export default function ModalUnstyled() {
-  const modalState = useModal();
-  const handleClose = () => modalState.update(false);
-
-  return (
-    <div>
-      <Modal
-        aria-labelledby="unstyled-modal-title"
-        aria-describedby="unstyled-modal-description"
-        open={modalState.isOpen}
-        onClose={handleClose}
-        slots={{ backdrop: StyledBackdrop }}
-      >
-        <ModalContent sx={{ width: 400 }}>
-          <h2 id="unstyled-modal-title" className="modal-title">
-            Question quality is too low
-          </h2>
-          <p id="unstyled-modal-description" className="modal-description">
-            {modalState.text}
-          </p>
-        </ModalContent>
-      </Modal>
-    </div>
-  );
-}
-
-const Backdrop = React.forwardRef<
+export const Backdrop = React.forwardRef<
   HTMLDivElement,
   { open?: boolean; className: string }
 >((props, ref) => {
@@ -57,15 +17,6 @@ const Backdrop = React.forwardRef<
     />
   );
 });
-
-const blue = {
-  200: "#99CCFF",
-  300: "#66B2FF",
-  400: "#3399FF",
-  500: "#007FFF",
-  600: "#0072E5",
-  700: "#0066CC",
-};
 
 const grey = {
   50: "#F3F6F9",
@@ -80,7 +31,7 @@ const grey = {
   900: "#1C2025",
 };
 
-const Modal = styled(BaseModal)`
+export const Modal = styled(BaseModal)`
   position: fixed;
   z-index: 1300;
   inset: 0;
@@ -89,7 +40,7 @@ const Modal = styled(BaseModal)`
   justify-content: center;
 `;
 
-const StyledBackdrop = styled(Backdrop)`
+export const StyledBackdrop = styled(Backdrop)`
   z-index: -1;
   position: fixed;
   inset: 0;
@@ -97,7 +48,7 @@ const StyledBackdrop = styled(Backdrop)`
   -webkit-tap-highlight-color: transparent;
 `;
 
-const ModalContent = styled("div")(
+export const ModalContent = styled("div")(
   ({ theme }) => css`
     font-family: "IBM Plex Sans", sans-serif;
     font-weight: 500;

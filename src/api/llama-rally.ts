@@ -110,3 +110,39 @@ export const verify = async (result: ISuccessResult) => {
 
   return (await res.json()) as VerifyResponse;
 };
+
+export type VoteResult = string | "draw";
+
+export type VoteRequestProps = {
+  modelA: string;
+  modelB: string;
+  result: VoteResult;
+};
+
+export async function vote(params: VoteRequestProps) {
+  const response = await fetch(`${serverUrl}/vote`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(params),
+  });
+  const jsonData = (await response.json()) as { message: string };
+
+  return jsonData;
+}
+
+type VoteAgentsProps = {
+  agentA: string;
+  agentB: string;
+  result: string;
+};
+
+export async function voteAgents(params: VoteAgentsProps) {
+  const response = await fetch(`${serverUrl}/vote_agents`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(params),
+  });
+  const jsonData = (await response.json()) as { message: string };
+
+  return jsonData;
+}

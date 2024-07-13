@@ -4,13 +4,15 @@ import { usePromptStore } from "../../stores/prompt.store";
 import { useModelsStore } from "../../stores/models.store";
 import { useState } from "react";
 import { criticizeUserRequest } from "../../api/llama-rally";
-import ModalUnstyled, { useModal } from "./Modal";
+import ModalUnstyled, { useModal } from "./modals";
+import { useVoteStore } from "../../stores/vote.store";
 
 export function Form() {
   const promptStore = usePromptStore();
 
-  const models = useModelsStore();
+  const modelsStore = useModelsStore();
   const modalState = useModal();
+  const voteStore = useVoteStore();
 
   const [loading, setLoading] = useState(false);
 
@@ -20,6 +22,10 @@ export function Form() {
 
   const handleSubmit = async () => {
     setLoading(true);
+
+    voteStore.reset();
+    modelsStore.reset();
+
     try {
       const res = await criticizeUserRequest(promptStore.prompt);
       console.log("res", res);
@@ -35,8 +41,8 @@ export function Form() {
       }
 
       await Promise.all([
-        models.fetchModelAResponse(promptStore.prompt),
-        models.fetchModelBResponse(promptStore.prompt),
+        modelsStore.fetchModelAResponse(promptStore.prompt),
+        modelsStore.fetchModelBResponse(promptStore.prompt),
       ]);
     } catch (error) {
       console.error("Error fetching responses:", error);

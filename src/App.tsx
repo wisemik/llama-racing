@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useEffect, type SyntheticEvent } from "react";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -11,21 +11,27 @@ import LeaderboardAgents from "./tabs/leaderboard-agents/LeaderboardAgents.tab.t
 import BattleAgents from "./tabs/battle-agents/BattleAgents.tab.tsx";
 import Auth from "./Auth.tsx";
 import { useAuthStore } from "./stores/auth.store.ts";
+import { useModelsStore } from "./stores/models.store.ts";
 
 export default function App() {
-  const [value, setValue] = React.useState("1");
+  const [value, setValue] = useState("1");
   const authStore = useAuthStore();
+  const models = useModelsStore();
 
-  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
+  const handleChange = (_: SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+
+  useEffect(() => {
+    models.initRandomModels();
+  }, []);
 
   if (!authStore.nullifier_hash) {
     return <Auth />;
   }
 
   return (
-    <Box sx={{ width: "100%", maxWidth: 800, typography: "body1" }}>
+    <Box sx={{ width: "100%", maxWidth: 1000, typography: "body1" }}>
       <Typography variant="h4" sx={{ mt: 2, mb: 2, fontWeight: "bold" }}>
         Llama Rally
       </Typography>

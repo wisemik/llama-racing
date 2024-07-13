@@ -3,18 +3,18 @@ import { useModelsStore } from "../../stores/models.store";
 import { Vote } from "./Vote";
 import { Form } from "./Form";
 import { Responses } from "./Responses";
-import { useEffect } from "react";
-import { getLeaderboard } from "../../api/llama-rally";
+import { useVoteStore } from "../../stores/vote.store";
 
 export function BattleModels() {
-  const models = useModelsStore();
+  const modelsStore = useModelsStore();
+  const voteStore = useVoteStore();
 
-  useEffect(() => {
-    models.initRandomModels();
-    getLeaderboard();
-  }, []);
+  const hasResponses =
+    modelsStore.modelA.response || modelsStore.modelB.response;
 
-  const hasResponses = models.modelA.response || models.modelB.response;
+  console.log("modelsStore.modelA.response", modelsStore.modelA.response);
+  console.log("modelsStore.modelB.response", modelsStore.modelB.response);
+  console.log("hasResponses", hasResponses, Boolean(hasResponses));
 
   return (
     <Box sx={{ width: "100%", margin: "auto", mt: 4 }}>
@@ -22,7 +22,7 @@ export function BattleModels() {
 
       <Form />
 
-      {hasResponses && <Vote />}
+      {Boolean(hasResponses) && <Vote />}
     </Box>
   );
 }
