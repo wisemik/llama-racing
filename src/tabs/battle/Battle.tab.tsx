@@ -30,8 +30,8 @@ export function Battle() {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      // const res = await criticizeUserRequest(prompt);
-      // console.log("res", res);
+      const res = await criticizeUserRequest(promptStore.prompt);
+      console.log("res", res);
       await Promise.all([
         models.fetchModelAResponse(promptStore.prompt),
         models.fetchModelBResponse(promptStore.prompt),

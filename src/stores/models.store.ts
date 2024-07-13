@@ -12,14 +12,8 @@ interface ModelState {
 }
 
 export const useModelsStore = create<ModelState>((set) => ({
-  modelA: {
-    name: "Model A (GPT-4o)",
-    response: "",
-  },
-  modelB: {
-    name: "Model B (GPT-4)",
-    response: "",
-  },
+  modelA: { name: "Model A (GPT-4o)", response: "" },
+  modelB: { name: "Model B (GPT-4)", response: "" },
   fetchModelAResponse: async (prompt: string) => {
     const stream = await createCompletions("gpt-4o", prompt);
 
