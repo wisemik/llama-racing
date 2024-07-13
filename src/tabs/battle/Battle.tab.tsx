@@ -10,38 +10,31 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { createCompletions } from "../../api/open-ai";
-
-interface ModelResponse {
-  model: string;
-  response: string;
-}
+import { criticizeUserRequest } from "../../api/llama-rally";
+import { useModelsStore } from "../../stores/models.store";
+import { usePromptStore } from "../../stores/prompt.store";
 
 export function Battle() {
-  const [prompt, setPrompt] = useState("");
+  const promptStore = usePromptStore();
 
-  const [responseA, setResponseA] = useState<ModelResponse>({
-    model: "Model A (GPT-4o)",
-    response: "",
-  });
-  const [responseB, setResponseB] = useState<ModelResponse>({
-    model: "Model B (GPT-4)",
-    response: "",
-  });
+  const models = useModelsStore();
 
-  const hasResponses = responseA.response || responseB.response;
+  const hasResponses = models.modelA.response || models.modelB.response;
 
   const [loading, setLoading] = useState(false);
 
   const handlePromptChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPrompt(event.target.value);
+    promptStore.setPrompt(event.target.value);
   };
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
+      // const res = await criticizeUserRequest(prompt);
+      // console.log("res", res);
       await Promise.all([
-        fetchModelAResponse(prompt),
-        fetchModelBResponse(prompt),
+        models.fetchModelAResponse(promptStore.prompt),
+        models.fetchModelBResponse(promptStore.prompt),
       ]);
     } catch (error) {
       console.error("Error fetching responses:", error);
@@ -55,29 +48,11 @@ export function Battle() {
     // Implement voting logic here
   };
 
-  const fetchModelAResponse = async (prompt: string) => {
-    const stream = await createCompletions("gpt-4o", prompt);
-
-    for await (const chunk of stream) {
-      const content = chunk.choices[0]?.delta?.content || "";
-      setResponseA((prev) => ({ ...prev, response: prev.response + content }));
-    }
-  };
-
-  const fetchModelBResponse = async (prompt: string) => {
-    const stream = await createCompletions("gpt-4", prompt);
-
-    for await (const chunk of stream) {
-      const content = chunk.choices[0]?.delta?.content || "";
-      setResponseB((prev) => ({ ...prev, response: prev.response + content }));
-    }
-  };
-
   return (
     <Box sx={{ width: "100%", margin: "auto", mt: 4 }}>
       <Grid container spacing={2} sx={{ mb: 10 }}>
         {hasResponses &&
-          [responseA, responseB].map((response, index) => (
+          [models.modelA, models.modelB].map((response, index) => (
             <Grid item xs={12} md={6} key={index}>
               <Paper elevation={3} sx={{ p: 2, height: "100%" }}>
                 <Typography
@@ -85,7 +60,7 @@ export function Battle() {
                   gutterBottom
                   sx={{ fontWeight: "bold" }}
                 >
-                  {response.model}
+                  {response.name}
                 </Typography>
                 <Typography variant="body1">{response.response}</Typography>
               </Paper>
@@ -98,7 +73,7 @@ export function Battle() {
           fullWidth
           variant="outlined"
           label="Enter your prompt"
-          value={prompt}
+          value={promptStore.prompt}
           onChange={handlePromptChange}
           multiline
           rows={1}
@@ -108,7 +83,7 @@ export function Battle() {
           <IconButton
             color="primary"
             onClick={handleSubmit}
-            disabled={loading || !prompt}
+            disabled={loading || promptStore.prompt.length === 0}
             sx={{ padding: 0 }}
           >
             <SendIcon />
@@ -116,7 +91,7 @@ export function Battle() {
         </Box>
       </Box>
 
-      {hasResponses.length > 0 && (
+      {hasResponses && (
         <Grid
           container
           spacing={2}
