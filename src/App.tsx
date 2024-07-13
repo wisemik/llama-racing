@@ -5,8 +5,10 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
-import Battle from "./tabs/battle/Battle.tab.tsx";
-import Leaderboard from "./tabs/leaderboard/Leaderboard.tab.tsx";
+import BattleModels from "./tabs/battle-models/BattleModels.tab.tsx";
+import LeaderboardModels from "./tabs/leaderboard-models/LeaderboardModels.tab.tsx";
+import LeaderboardAgents from "./tabs/leaderboard-agents/LeaderboardAgents.tab.tsx";
+import BattleAgents from "./tabs/battle-agents/BattleAgents.tab.tsx";
 
 export default function App() {
   const [value, setValue] = React.useState("1");
@@ -23,15 +25,23 @@ export default function App() {
       <TabContext value={value}>
         <Box sx={{ width: "100%", borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange}>
-            <Tab label="Battle" value="1" />
-            <Tab label="LeaderBoard" value="2" />
+            <Tab label="BATTLE MODELS" value="1" />
+            <Tab label="BATTLE AGENTS" value="2" />
+            <Tab label="LEADERBOARD MODELS" value="3" />
+            <Tab label="LEADERBOARD AGENTS" value="4" />
           </TabList>
         </Box>
         <TabPanel value="1" sx={{ padding: 0 }}>
-          <Battle />
+          <BattleModels />
         </TabPanel>
         <TabPanel value="2" sx={{ padding: 2 }}>
-          <Leaderboard />
+          <BattleAgents />
+        </TabPanel>
+        <TabPanel value="3" sx={{ padding: 2 }}>
+          <LeaderboardModels />
+        </TabPanel>
+        <TabPanel value="4" sx={{ padding: 2 }}>
+          <LeaderboardAgents />
         </TabPanel>
       </TabContext>
     </Box>

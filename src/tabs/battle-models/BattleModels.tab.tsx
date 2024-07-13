@@ -4,12 +4,14 @@ import { Vote } from "./Vote";
 import { Form } from "./Form";
 import { Responses } from "./Responses";
 import { useEffect } from "react";
+import { getLeaderboard } from "../../api/llama-rally";
 
-export function Battle() {
+export function BattleModels() {
   const models = useModelsStore();
 
   useEffect(() => {
     models.initRandomModels();
+    getLeaderboard();
   }, []);
 
   const hasResponses = models.modelA.response || models.modelB.response;
@@ -25,4 +27,4 @@ export function Battle() {
   );
 }
 
-export default Battle;
+export default BattleModels;

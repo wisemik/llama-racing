@@ -34,3 +34,30 @@ export async function getRandomModels() {
 
   return jsonData;
 }
+
+// export async function llmRequestStreaming(model: string, message: string) {
+//   const response = await fetch(`${serverUrl}/llm_request_streaming`, {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify({ model, message }),
+//   });
+
+//   if (!response.body) {
+//     return
+//   }
+
+//   console.log()
+
+//   for await (const chunk of response.body.getReader()) {
+
+//   }
+// }
+
+export async function getLeaderboard() {
+  const response = await fetch(`${serverUrl}/leaderboard`, {
+    headers: { "Content-Type": "application/json" },
+  });
+  const jsonData = await response.json();
+
+  return jsonData;
+}
