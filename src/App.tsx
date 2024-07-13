@@ -1,174 +1,39 @@
-import React, { useState, useEffect } from "react";
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Paper,
-  Grid,
-  IconButton,
-} from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
-import { createCompletions, openai } from "./api/open-ai";
+import * as React from "react";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+import Box from "@mui/material/Box";
+import { Typography } from "@mui/material";
+import Battle from "./tabs/battle/Battle.tab.tsx";
+import Leaderboard from "./tabs/leaderboard/Leaderboard.tab.tsx";
 
-interface ModelResponse {
-  model: string;
-  response: string;
-}
+export default function App() {
+  const [value, setValue] = React.useState("1");
 
-function App() {
-  const [prompt, setPrompt] = useState("");
-
-  const [responseA, setResponseA] = useState<ModelResponse>({
-    model: "Model A (GPT-4o)",
-    response: "",
-  });
-  const [responseB, setResponseB] = useState<ModelResponse>({
-    model: "Model B (GPT-4)",
-    response: "",
-  });
-
-  const hasResponses = responseA.response || responseB.response;
-
-  const [loading, setLoading] = useState(false);
-
-  const handlePromptChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPrompt(event.target.value);
-  };
-
-  const handleSubmit = async () => {
-    setLoading(true);
-    try {
-      await Promise.all([
-        fetchModelAResponse(prompt),
-        fetchModelBResponse(prompt),
-      ]);
-    } catch (error) {
-      console.error("Error fetching responses:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleVote = (vote: string) => {
-    console.log(`Vote: ${vote}`);
-    // Implement voting logic here
-  };
-
-  const fetchModelAResponse = async (prompt: string) => {
-    const stream = await createCompletions("gpt-4o", prompt);
-
-    for await (const chunk of stream) {
-      console.log("chunk", chunk);
-
-      const content = chunk.choices[0]?.delta?.content || "";
-      setResponseA((prev) => ({ ...prev, response: prev.response + content }));
-    }
-  };
-
-  const fetchModelBResponse = async (prompt: string) => {
-    const stream = await createCompletions("gpt-4", prompt);
-
-    for await (const chunk of stream) {
-      const content = chunk.choices[0]?.delta?.content || "";
-      setResponseB((prev) => ({ ...prev, response: prev.response + content }));
-    }
+  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
   };
 
   return (
-    <Box sx={{ maxWidth: 800, margin: "auto", padding: 2 }}>
-      <Typography variant="h4" sx={{ mb: 2, fontWeight: "bold" }}>
+    <Box sx={{ width: "100%", typography: "body1" }}>
+      <Typography variant="h4" sx={{ mt: 2, mb: 2, fontWeight: "bold" }}>
         Llama Rally
       </Typography>
-
-      <Grid container spacing={2} sx={{ mb: 10 }}>
-        {hasResponses &&
-          [responseA, responseB].map((response, index) => (
-            <Grid item xs={12} md={6} key={index}>
-              <Paper elevation={3} sx={{ p: 2, height: "100%" }}>
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  sx={{ fontWeight: "bold" }}
-                >
-                  {response.model}
-                </Typography>
-                <Typography variant="body1">{response.response}</Typography>
-              </Paper>
-            </Grid>
-          ))}
-      </Grid>
-
-      <Box sx={{ mb: 2 }}>
-        <TextField
-          fullWidth
-          variant="outlined"
-          label="Enter your prompt"
-          value={prompt}
-          onChange={handlePromptChange}
-          multiline
-          rows={1}
-          sx={{ "& .MuiOutlinedInput-root": { borderRadius: "4px" } }}
-        />
-        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}>
-          <IconButton
-            color="primary"
-            onClick={handleSubmit}
-            disabled={loading || !prompt}
-            sx={{ padding: 0 }}
-          >
-            <SendIcon />
-          </IconButton>
+      <TabContext value={value}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <TabList onChange={handleChange}>
+            <Tab label="Battle" value="1" />
+            <Tab label="LeaderBoard" value="2" />
+          </TabList>
         </Box>
-      </Box>
-
-      {hasResponses.length > 0 && (
-        <Grid
-          container
-          spacing={2}
-          justifyContent="space-between"
-          sx={{ mt: 2 }}
-        >
-          <Grid item>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={() => handleVote("A is better")}
-            >
-              A IS BETTER
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={() => handleVote("B is better")}
-            >
-              B IS BETTER
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={() => handleVote("Tie")}
-            >
-              TIE
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={() => handleVote("Both are bad")}
-            >
-              BOTH ARE BAD
-            </Button>
-          </Grid>
-        </Grid>
-      )}
+        <TabPanel value="1">
+          <Battle />
+        </TabPanel>
+        <TabPanel value="2">
+          <Leaderboard />
+        </TabPanel>
+      </TabContext>
     </Box>
   );
 }
-
-export default App;
