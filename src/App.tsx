@@ -16,21 +16,21 @@ export default function App() {
   };
 
   return (
-    <Box sx={{ width: "100%", typography: "body1" }}>
+    <Box sx={{ width: "100%", maxWidth: 800, typography: "body1" }}>
       <Typography variant="h4" sx={{ mt: 2, mb: 2, fontWeight: "bold" }}>
         Llama Rally
       </Typography>
       <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Box sx={{ width: "100%", borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange}>
             <Tab label="Battle" value="1" />
             <Tab label="LeaderBoard" value="2" />
           </TabList>
         </Box>
-        <TabPanel value="1">
+        <TabPanel value="1" sx={{ padding: 0 }}>
           <Battle />
         </TabPanel>
-        <TabPanel value="2">
+        <TabPanel value="2" sx={{ padding: 2 }}>
           <Leaderboard />
         </TabPanel>
       </TabContext>

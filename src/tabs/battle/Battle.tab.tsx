@@ -74,7 +74,7 @@ export function Battle() {
   };
 
   return (
-    <Box sx={{ maxWidth: 800, margin: "auto", padding: 2 }}>
+    <Box sx={{ width: "100%", margin: "auto", mt: 4 }}>
       <Grid container spacing={2} sx={{ mb: 10 }}>
         {hasResponses &&
           [responseA, responseB].map((response, index) => (
@@ -93,7 +93,7 @@ export function Battle() {
           ))}
       </Grid>
 
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ mb: 2, display: "flex", gap: 2 }}>
         <TextField
           fullWidth
           variant="outlined"

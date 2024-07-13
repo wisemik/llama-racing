@@ -12,5 +12,5 @@ import SendIcon from "@mui/icons-material/Send";
 import { createCompletions } from "../../api/open-ai";
 
 export default function Leaderboard() {
-  return <div>LeaderboardPage</div>;
+  return <div>Leaderboard tab</div>;
 }
