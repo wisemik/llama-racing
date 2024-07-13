@@ -22,3 +22,15 @@ export async function criticizeUserRequest(prompt: string) {
 
   return jsonData;
 }
+
+export async function getRandomModels() {
+  const response = await fetch(`${serverUrl}/random_models`, {
+    headers: { "Content-Type": "application/json" },
+  });
+  const jsonData = (await response.json()) as {
+    modelA: string;
+    modelB: string;
+  };
+
+  return jsonData;
+}

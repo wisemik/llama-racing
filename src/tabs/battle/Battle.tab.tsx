@@ -3,9 +3,14 @@ import { useModelsStore } from "../../stores/models.store";
 import { Vote } from "./Vote";
 import { Form } from "./Form";
 import { Responses } from "./Responses";
+import { useEffect } from "react";
 
 export function Battle() {
   const models = useModelsStore();
+
+  useEffect(() => {
+    models.initRandomModels();
+  }, []);
 
   const hasResponses = models.modelA.response || models.modelB.response;
 

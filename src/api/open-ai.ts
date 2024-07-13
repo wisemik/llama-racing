@@ -5,7 +5,7 @@ export const openai = new OpenAI({
   dangerouslyAllowBrowser: true, // This is needed for client-side usage
 });
 
-export const createCompletions = (model: "gpt-4o" | "gpt-4", prompt: string) =>
+export const createCompletions = (model: string, prompt: string) =>
   openai.chat.completions.create({
     model,
     messages: [{ role: "user", content: prompt }],
