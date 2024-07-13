@@ -5,7 +5,7 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
-import BattleModels from "./tabs/battle-models/BattleModels.tab.tsx";
+import BattleModels from "./tabs/battle-models/Battle.tab.tsx";
 import LeaderboardModels from "./tabs/leaderboard-models/LeaderboardModels.tab.tsx";
 import LeaderboardAgents from "./tabs/leaderboard-agents/LeaderboardAgents.tab.tsx";
 import BattleAgents from "./tabs/battle-agents/BattleAgents.tab.tsx";
