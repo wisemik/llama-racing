@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { useLeaderboardModelsStore } from "../../stores/leaderboard.store";
+import { LeaderboardModel } from "../../api/llama-rally";
 
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
-const columns: GridColDef<Leaderboard>[] = [
+const columns: GridColDef<LeaderboardModel>[]  = [
   { field: "name", headerName: "Name", width: 150 },
   {
     field: "price",
