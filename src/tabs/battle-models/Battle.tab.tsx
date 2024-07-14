@@ -3,11 +3,9 @@ import { useModelsStore } from "../../stores/models.store";
 import { Vote } from "./Vote";
 import { Form } from "./Form";
 import { Responses } from "./Responses";
-import { useVoteStore } from "../../stores/vote.store";
 
 export function BattleModels() {
   const modelsStore = useModelsStore();
-  const voteStore = useVoteStore();
 
   const hasResponses =
     modelsStore.modelA.response || modelsStore.modelB.response;
