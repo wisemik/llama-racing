@@ -12,11 +12,13 @@ import BattleAgents from "./tabs/battle-agents/BattleAgents.tab.tsx";
 import Auth from "./Auth.tsx";
 import { useAuthStore } from "./stores/auth.store.ts";
 import { useModelsStore } from "./stores/models.store.ts";
+import { useAgentsStore } from "./stores/agents.store.ts";
 
 export default function App() {
   const [value, setValue] = useState("1");
   const authStore = useAuthStore();
   const models = useModelsStore();
+  const agents = useAgentsStore();
 
   const handleChange = (_: SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -24,6 +26,10 @@ export default function App() {
 
   useEffect(() => {
     models.initRandomModels();
+  }, []);
+
+  useEffect(() => {
+    agents.initRandomAgents();
   }, []);
 
   if (!authStore.nullifier_hash) {

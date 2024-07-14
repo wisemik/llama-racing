@@ -37,6 +37,33 @@ export async function getRandomModels() {
   return jsonData;
 }
 
+export async function getRandomAgents() {
+  const response = await fetch(`${serverUrl}/random_agents`, {
+    headers: { "Content-Type": "application/json" },
+  });
+  const jsonData = (await response.json()) as {
+    agentA: string;
+    agentB: string;
+  };
+  return jsonData;
+}
+
+export async function agentsRequest(message: string, agent: string) {
+  const response = await fetch(`${serverUrl}/agent_request`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ message, agent }),
+  });
+  const jsonData = (await response.json()) as {
+    message: string;
+    response: string;
+  };
+  return jsonData;
+}
+
+
 // export async function llmRequestStreaming(model: string, message: string) {
 //   const response = await fetch(`${serverUrl}/llm_request_streaming`, {
 //     method: "POST",
@@ -130,7 +157,7 @@ export async function vote(params: VoteRequestProps) {
   return jsonData;
 }
 
-type VoteAgentsProps = {
+export type VoteAgentsProps = {
   agentA: string;
   agentB: string;
   result: string;
