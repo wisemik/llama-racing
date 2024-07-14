@@ -2,7 +2,6 @@ import * as React from "react";
 import clsx from "clsx";
 import { styled, css } from "@mui/system";
 import { Modal as BaseModal } from "@mui/base/Modal";
-import { create } from "zustand";
 
 export const Backdrop = React.forwardRef<
   HTMLDivElement,
